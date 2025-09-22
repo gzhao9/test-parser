@@ -34,14 +34,17 @@ public class TestCaseFinder {
             }
 
             cu.findAll(MethodDeclaration.class).forEach(method -> {
-                // 筛选注解包含 "test"
+                // 获取所有注解
                 List<String> annotations = method.getAnnotations()
                         .stream()
                         .map(a -> a.getNameAsString())
-                        .filter(a -> a.toLowerCase().contains("test"))
                         .collect(Collectors.toList());
 
-                if (!annotations.isEmpty()) {
+                // 检查是否有测试相关的注解
+                boolean hasTestAnnotation = annotations.stream()
+                        .anyMatch(a -> a.toLowerCase().contains("test"));
+
+                if (hasTestAnnotation) {
                     TestCaseInfo info = new TestCaseInfo(
                             file.getAbsolutePath(),
                             method.getNameAsString(),
