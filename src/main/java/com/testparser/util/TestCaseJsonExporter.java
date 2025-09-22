@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 测试用例 JSON 导出工具类
- * 负责将测试用例列表转换为 JSON 格式并保存到指定文件
+ * Test case JSON export utility class
+ * Responsible for converting test case lists to JSON format and saving to specified files
  */
 public class TestCaseJsonExporter {
 
@@ -18,70 +18,70 @@ public class TestCaseJsonExporter {
 
     public TestCaseJsonExporter() {
         this.objectMapper = new ObjectMapper();
-        // 启用格式化输出，使 JSON 文件更易读
+        // Enable formatted output to make JSON files more readable
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        // 可以根据需要添加其他配置
+        // Additional configuration can be added as needed
         this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
     /**
-     * 将测试用例列表保存为 JSON 文件
+     * Save test case list as JSON file
      * 
-     * @param testCases 测试用例列表
-     * @param outputPath 输出文件路径（包含文件名，例如："/path/to/output/testcases.json"）
-     * @throws IOException 如果文件写入失败
+     * @param testCases Test case list
+     * @param outputPath Output file path (including filename, e.g.: "/path/to/output/testcases.json")
+     * @throws IOException If file writing fails
      */
     public void exportToJson(List<TestCaseInfo> testCases, String outputPath) throws IOException {
         if (testCases == null) {
-            throw new IllegalArgumentException("测试用例列表不能为 null");
+            throw new IllegalArgumentException("Test cases list cannot be null");
         }
         
         if (outputPath == null || outputPath.trim().isEmpty()) {
-            throw new IllegalArgumentException("输出路径不能为空");
+            throw new IllegalArgumentException("Output path cannot be empty");
         }
 
-        // 确保输出目录存在
+        // Ensure output directory exists
         File outputFile = new File(outputPath);
         File parentDir = outputFile.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
             boolean created = parentDir.mkdirs();
             if (!created) {
-                throw new IOException("无法创建输出目录: " + parentDir.getAbsolutePath());
+                throw new IOException("Unable to create output directory: " + parentDir.getAbsolutePath());
             }
         }
 
-        // 将测试用例列表转换为 JSON 并写入文件
+        // Convert test case list to JSON and write to file
         objectMapper.writeValue(outputFile, testCases);
         
-        System.out.println("JSON 文件已保存到: " + outputPath);
-        System.out.println("共导出 " + testCases.size() + " 个测试用例");
+        System.out.println("JSON file saved to: " + outputPath);
+        System.out.println("Exported " + testCases.size() + " test cases");
     }
 
     /**
-     * 将测试用例列表转换为 JSON 字符串
+     * Convert test case list to JSON string
      * 
-     * @param testCases 测试用例列表
-     * @return JSON 字符串
-     * @throws IOException 如果转换失败
+     * @param testCases Test case list
+     * @return JSON string
+     * @throws IOException If conversion fails
      */
     public String toJsonString(List<TestCaseInfo> testCases) throws IOException {
         if (testCases == null) {
-            throw new IllegalArgumentException("测试用例列表不能为 null");
+            throw new IllegalArgumentException("Test cases list cannot be null");
         }
         
         return objectMapper.writeValueAsString(testCases);
     }
 
     /**
-     * 从 JSON 字符串解析测试用例列表
+     * Parse test case list from JSON string
      * 
-     * @param jsonString JSON 字符串
-     * @return 测试用例列表
-     * @throws IOException 如果解析失败
+     * @param jsonString JSON string
+     * @return Test case list
+     * @throws IOException If parsing fails
      */
     public List<TestCaseInfo> fromJsonString(String jsonString) throws IOException {
         if (jsonString == null || jsonString.trim().isEmpty()) {
-            throw new IllegalArgumentException("JSON 字符串不能为空");
+            throw new IllegalArgumentException("JSON string cannot be empty");
         }
         
         return objectMapper.readValue(jsonString, 
@@ -89,20 +89,20 @@ public class TestCaseJsonExporter {
     }
 
     /**
-     * 从 JSON 文件读取测试用例列表
+     * Read test case list from JSON file
      * 
-     * @param filePath JSON 文件路径
-     * @return 测试用例列表
-     * @throws IOException 如果文件读取失败
+     * @param filePath JSON file path
+     * @return Test case list
+     * @throws IOException If file reading fails
      */
     public List<TestCaseInfo> importFromJson(String filePath) throws IOException {
         if (filePath == null || filePath.trim().isEmpty()) {
-            throw new IllegalArgumentException("文件路径不能为空");
+            throw new IllegalArgumentException("File path cannot be empty");
         }
         
         File file = new File(filePath);
         if (!file.exists()) {
-            throw new IOException("文件不存在: " + filePath);
+            throw new IOException("File does not exist: " + filePath);
         }
         
         return objectMapper.readValue(file, 

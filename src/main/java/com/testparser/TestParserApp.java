@@ -25,11 +25,11 @@ public class TestParserApp {
         }
 
         try {
-            System.out.println("开始解析项目: " + projectRootPath);
+            System.out.println("Starting to parse project: " + projectRootPath);
             
             // 步骤1: 解析测试用例
             List<TestCaseInfo> testCases = TestCaseFinder.parseTests(projectRootPath);
-            System.out.println("成功解析到 " + testCases.size() + " 个测试用例");
+            System.out.println("Successfully parsed " + testCases.size() + " test cases");
 
             // 步骤2: 导出到 JSON 文件
             TestCaseJsonExporter exporter = new TestCaseJsonExporter();
@@ -39,10 +39,10 @@ public class TestParserApp {
             printStatistics(testCases);
             
         } catch (IOException e) {
-            System.err.println("处理过程中出现错误: " + e.getMessage());
+            System.err.println("Error occurred during processing: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("未知错误: " + e.getMessage());
+            System.err.println("Unknown error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -54,19 +54,19 @@ public class TestParserApp {
      */
     private static void printStatistics(List<TestCaseInfo> testCases) {
         if (testCases.isEmpty()) {
-            System.out.println("没有找到测试用例");
+            System.out.println("No test cases found");
             return;
         }
 
-        System.out.println("\n=== 统计信息 ===");
-        System.out.println("总测试用例数: " + testCases.size());
+        System.out.println("\n=== Statistics ===");
+        System.out.println("Total test cases: " + testCases.size());
 
         // 统计不同文件中的测试用例数量
         long uniqueFiles = testCases.stream()
                 .map(TestCaseInfo::getFilePath)
                 .distinct()
                 .count();
-        System.out.println("涉及文件数: " + uniqueFiles);
+        System.out.println("Files involved: " + uniqueFiles);
 
         // 统计注解类型
         testCases.stream()
@@ -78,7 +78,7 @@ public class TestParserApp {
                                     .mapToLong(a -> a.equals(annotation) ? 1 : 0)
                                     .sum())
                             .sum();
-                    System.out.println("注解 @" + annotation + ": " + count + " 个");
+                    System.out.println("Annotation @" + annotation + ": " + count + " occurrences");
                 });
     }
 }

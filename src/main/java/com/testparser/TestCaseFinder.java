@@ -29,7 +29,7 @@ public class TestCaseFinder {
             try {
                 cu = StaticJavaParser.parse(file);
             } catch (Exception e) {
-                System.err.println("解析失败: " + file.getAbsolutePath());
+                System.err.println("Parse failed: " + file.getAbsolutePath());
                 continue;
             }
 
