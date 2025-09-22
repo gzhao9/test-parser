@@ -1,0 +1,281 @@
+[ {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\model\\ValidatorTests.java",
+  "methodName" : "shouldNotValidateWhenFirstNameEmpty",
+  "sourceCode" : "@Test\r\nvoid shouldNotValidateWhenFirstNameEmpty() {\r\n    LocaleContextHolder.setLocale(Locale.ENGLISH);\r\n    Person person = new Person();\r\n    person.setFirstName(\"\");\r\n    person.setLastName(\"smith\");\r\n    Validator validator = createValidator();\r\n    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);\r\n    assertThat(constraintViolations).hasSize(1);\r\n    ConstraintViolation<Person> violation = constraintViolations.iterator().next();\r\n    assertThat(violation.getPropertyPath()).hasToString(\"firstName\");\r\n    assertThat(violation.getMessage()).isEqualTo(\"must not be blank\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\MySqlIntegrationTests.java",
+  "methodName" : "testFindAll",
+  "sourceCode" : "@Test\r\nvoid testFindAll() {\r\n    vets.findAll();\r\n    // served from cache\r\n    vets.findAll();\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\MySqlIntegrationTests.java",
+  "methodName" : "testOwnerDetails",
+  "sourceCode" : "@Test\r\nvoid testOwnerDetails() {\r\n    RestTemplate template = builder.rootUri(\"http://localhost:\" + port).build();\r\n    ResponseEntity<String> result = template.exchange(RequestEntity.get(\"/owners/1\").build(), String.class);\r\n    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testInitCreationForm",
+  "sourceCode" : "@Test\r\nvoid testInitCreationForm() throws Exception {\r\n    mockMvc.perform(get(\"/owners/new\")).andExpect(status().isOk()).andExpect(model().attributeExists(\"owner\")).andExpect(view().name(\"owners/createOrUpdateOwnerForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessCreationFormSuccess",
+  "sourceCode" : "@Test\r\nvoid testProcessCreationFormSuccess() throws Exception {\r\n    mockMvc.perform(post(\"/owners/new\").param(\"firstName\", \"Joe\").param(\"lastName\", \"Bloggs\").param(\"address\", \"123 Caramel Street\").param(\"city\", \"London\").param(\"telephone\", \"1316761638\")).andExpect(status().is3xxRedirection());\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessCreationFormHasErrors",
+  "sourceCode" : "@Test\r\nvoid testProcessCreationFormHasErrors() throws Exception {\r\n    mockMvc.perform(post(\"/owners/new\").param(\"firstName\", \"Joe\").param(\"lastName\", \"Bloggs\").param(\"city\", \"London\")).andExpect(status().isOk()).andExpect(model().attributeHasErrors(\"owner\")).andExpect(model().attributeHasFieldErrors(\"owner\", \"address\")).andExpect(model().attributeHasFieldErrors(\"owner\", \"telephone\")).andExpect(view().name(\"owners/createOrUpdateOwnerForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testInitFindForm",
+  "sourceCode" : "@Test\r\nvoid testInitFindForm() throws Exception {\r\n    mockMvc.perform(get(\"/owners/find\")).andExpect(status().isOk()).andExpect(model().attributeExists(\"owner\")).andExpect(view().name(\"owners/findOwners\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessFindFormSuccess",
+  "sourceCode" : "@Test\r\nvoid testProcessFindFormSuccess() throws Exception {\r\n    Page<Owner> tasks = new PageImpl<>(List.of(george(), new Owner()));\r\n    when(this.owners.findByLastNameStartingWith(anyString(), any(Pageable.class))).thenReturn(tasks);\r\n    mockMvc.perform(get(\"/owners?page=1\")).andExpect(status().isOk()).andExpect(view().name(\"owners/ownersList\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessFindFormByLastName",
+  "sourceCode" : "@Test\r\nvoid testProcessFindFormByLastName() throws Exception {\r\n    Page<Owner> tasks = new PageImpl<>(List.of(george()));\r\n    when(this.owners.findByLastNameStartingWith(eq(\"Franklin\"), any(Pageable.class))).thenReturn(tasks);\r\n    mockMvc.perform(get(\"/owners?page=1\").param(\"lastName\", \"Franklin\")).andExpect(status().is3xxRedirection()).andExpect(view().name(\"redirect:/owners/\" + TEST_OWNER_ID));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessFindFormNoOwnersFound",
+  "sourceCode" : "@Test\r\nvoid testProcessFindFormNoOwnersFound() throws Exception {\r\n    Page<Owner> tasks = new PageImpl<>(List.of());\r\n    when(this.owners.findByLastNameStartingWith(eq(\"Unknown Surname\"), any(Pageable.class))).thenReturn(tasks);\r\n    mockMvc.perform(get(\"/owners?page=1\").param(\"lastName\", \"Unknown Surname\")).andExpect(status().isOk()).andExpect(model().attributeHasFieldErrors(\"owner\", \"lastName\")).andExpect(model().attributeHasFieldErrorCode(\"owner\", \"lastName\", \"notFound\")).andExpect(view().name(\"owners/findOwners\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testInitUpdateOwnerForm",
+  "sourceCode" : "@Test\r\nvoid testInitUpdateOwnerForm() throws Exception {\r\n    mockMvc.perform(get(\"/owners/{ownerId}/edit\", TEST_OWNER_ID)).andExpect(status().isOk()).andExpect(model().attributeExists(\"owner\")).andExpect(model().attribute(\"owner\", hasProperty(\"lastName\", is(\"Franklin\")))).andExpect(model().attribute(\"owner\", hasProperty(\"firstName\", is(\"George\")))).andExpect(model().attribute(\"owner\", hasProperty(\"address\", is(\"110 W. Liberty St.\")))).andExpect(model().attribute(\"owner\", hasProperty(\"city\", is(\"Madison\")))).andExpect(model().attribute(\"owner\", hasProperty(\"telephone\", is(\"6085551023\")))).andExpect(view().name(\"owners/createOrUpdateOwnerForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessUpdateOwnerFormSuccess",
+  "sourceCode" : "@Test\r\nvoid testProcessUpdateOwnerFormSuccess() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/edit\", TEST_OWNER_ID).param(\"firstName\", \"Joe\").param(\"lastName\", \"Bloggs\").param(\"address\", \"123 Caramel Street\").param(\"city\", \"London\").param(\"telephone\", \"1616291589\")).andExpect(status().is3xxRedirection()).andExpect(view().name(\"redirect:/owners/{ownerId}\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessUpdateOwnerFormUnchangedSuccess",
+  "sourceCode" : "@Test\r\nvoid testProcessUpdateOwnerFormUnchangedSuccess() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/edit\", TEST_OWNER_ID)).andExpect(status().is3xxRedirection()).andExpect(view().name(\"redirect:/owners/{ownerId}\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessUpdateOwnerFormHasErrors",
+  "sourceCode" : "@Test\r\nvoid testProcessUpdateOwnerFormHasErrors() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/edit\", TEST_OWNER_ID).param(\"firstName\", \"Joe\").param(\"lastName\", \"Bloggs\").param(\"address\", \"\").param(\"telephone\", \"\")).andExpect(status().isOk()).andExpect(model().attributeHasErrors(\"owner\")).andExpect(model().attributeHasFieldErrors(\"owner\", \"address\")).andExpect(model().attributeHasFieldErrors(\"owner\", \"telephone\")).andExpect(view().name(\"owners/createOrUpdateOwnerForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testShowOwner",
+  "sourceCode" : "@Test\r\nvoid testShowOwner() throws Exception {\r\n    mockMvc.perform(get(\"/owners/{ownerId}\", TEST_OWNER_ID)).andExpect(status().isOk()).andExpect(model().attribute(\"owner\", hasProperty(\"lastName\", is(\"Franklin\")))).andExpect(model().attribute(\"owner\", hasProperty(\"firstName\", is(\"George\")))).andExpect(model().attribute(\"owner\", hasProperty(\"address\", is(\"110 W. Liberty St.\")))).andExpect(model().attribute(\"owner\", hasProperty(\"city\", is(\"Madison\")))).andExpect(model().attribute(\"owner\", hasProperty(\"telephone\", is(\"6085551023\")))).andExpect(model().attribute(\"owner\", hasProperty(\"pets\", not(empty())))).andExpect(model().attribute(\"owner\", hasProperty(\"pets\", hasItem(hasProperty(\"visits\", hasSize(greaterThan(0))))))).andExpect(view().name(\"owners/ownerDetails\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\OwnerControllerTests.java",
+  "methodName" : "testProcessUpdateOwnerFormWithIdMismatch",
+  "sourceCode" : "@Test\r\npublic void testProcessUpdateOwnerFormWithIdMismatch() throws Exception {\r\n    int pathOwnerId = 1;\r\n    Owner owner = new Owner();\r\n    owner.setId(2);\r\n    owner.setFirstName(\"John\");\r\n    owner.setLastName(\"Doe\");\r\n    owner.setAddress(\"Center Street\");\r\n    owner.setCity(\"New York\");\r\n    owner.setTelephone(\"0123456789\");\r\n    when(owners.findById(pathOwnerId)).thenReturn(Optional.of(owner));\r\n    mockMvc.perform(MockMvcRequestBuilders.post(\"/owners/{ownerId}/edit\", pathOwnerId).flashAttr(\"owner\", owner)).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl(\"/owners/\" + pathOwnerId + \"/edit\")).andExpect(flash().attributeExists(\"error\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testInitCreationForm",
+  "sourceCode" : "@Test\r\nvoid testInitCreationForm() throws Exception {\r\n    mockMvc.perform(get(\"/owners/{ownerId}/pets/new\", TEST_OWNER_ID)).andExpect(status().isOk()).andExpect(view().name(\"pets/createOrUpdatePetForm\")).andExpect(model().attributeExists(\"pet\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testProcessCreationFormSuccess",
+  "sourceCode" : "@Test\r\nvoid testProcessCreationFormSuccess() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/new\", TEST_OWNER_ID).param(\"name\", \"Betty\").param(\"type\", \"hamster\").param(\"birthDate\", \"2015-02-12\")).andExpect(status().is3xxRedirection()).andExpect(view().name(\"redirect:/owners/{ownerId}\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testProcessCreationFormWithBlankName",
+  "sourceCode" : "@Test\r\nvoid testProcessCreationFormWithBlankName() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/new\", TEST_OWNER_ID).param(\"name\", \"\\t \\n\").param(\"birthDate\", \"2015-02-12\")).andExpect(model().attributeHasNoErrors(\"owner\")).andExpect(model().attributeHasErrors(\"pet\")).andExpect(model().attributeHasFieldErrors(\"pet\", \"name\")).andExpect(model().attributeHasFieldErrorCode(\"pet\", \"name\", \"required\")).andExpect(status().isOk()).andExpect(view().name(\"pets/createOrUpdatePetForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testProcessCreationFormWithDuplicateName",
+  "sourceCode" : "@Test\r\nvoid testProcessCreationFormWithDuplicateName() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/new\", TEST_OWNER_ID).param(\"name\", \"petty\").param(\"birthDate\", \"2015-02-12\")).andExpect(model().attributeHasNoErrors(\"owner\")).andExpect(model().attributeHasErrors(\"pet\")).andExpect(model().attributeHasFieldErrors(\"pet\", \"name\")).andExpect(model().attributeHasFieldErrorCode(\"pet\", \"name\", \"duplicate\")).andExpect(status().isOk()).andExpect(view().name(\"pets/createOrUpdatePetForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testProcessCreationFormWithMissingPetType",
+  "sourceCode" : "@Test\r\nvoid testProcessCreationFormWithMissingPetType() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/new\", TEST_OWNER_ID).param(\"name\", \"Betty\").param(\"birthDate\", \"2015-02-12\")).andExpect(model().attributeHasNoErrors(\"owner\")).andExpect(model().attributeHasErrors(\"pet\")).andExpect(model().attributeHasFieldErrors(\"pet\", \"type\")).andExpect(model().attributeHasFieldErrorCode(\"pet\", \"type\", \"required\")).andExpect(status().isOk()).andExpect(view().name(\"pets/createOrUpdatePetForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testProcessCreationFormWithInvalidBirthDate",
+  "sourceCode" : "@Test\r\nvoid testProcessCreationFormWithInvalidBirthDate() throws Exception {\r\n    LocalDate currentDate = LocalDate.now();\r\n    String futureBirthDate = currentDate.plusMonths(1).toString();\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/new\", TEST_OWNER_ID).param(\"name\", \"Betty\").param(\"birthDate\", futureBirthDate)).andExpect(model().attributeHasNoErrors(\"owner\")).andExpect(model().attributeHasErrors(\"pet\")).andExpect(model().attributeHasFieldErrors(\"pet\", \"birthDate\")).andExpect(model().attributeHasFieldErrorCode(\"pet\", \"birthDate\", \"typeMismatch.birthDate\")).andExpect(status().isOk()).andExpect(view().name(\"pets/createOrUpdatePetForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testInitUpdateForm",
+  "sourceCode" : "@Test\r\nvoid testInitUpdateForm() throws Exception {\r\n    mockMvc.perform(get(\"/owners/{ownerId}/pets/{petId}/edit\", TEST_OWNER_ID, TEST_PET_ID)).andExpect(status().isOk()).andExpect(model().attributeExists(\"pet\")).andExpect(view().name(\"pets/createOrUpdatePetForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testProcessUpdateFormSuccess",
+  "sourceCode" : "@Test\r\nvoid testProcessUpdateFormSuccess() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/{petId}/edit\", TEST_OWNER_ID, TEST_PET_ID).param(\"name\", \"Betty\").param(\"type\", \"hamster\").param(\"birthDate\", \"2015-02-12\")).andExpect(status().is3xxRedirection()).andExpect(view().name(\"redirect:/owners/{ownerId}\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testProcessUpdateFormWithInvalidBirthDate",
+  "sourceCode" : "@Test\r\nvoid testProcessUpdateFormWithInvalidBirthDate() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/{petId}/edit\", TEST_OWNER_ID, TEST_PET_ID).param(\"name\", \" \").param(\"birthDate\", \"2015/02/12\")).andExpect(model().attributeHasNoErrors(\"owner\")).andExpect(model().attributeHasErrors(\"pet\")).andExpect(model().attributeHasFieldErrors(\"pet\", \"birthDate\")).andExpect(model().attributeHasFieldErrorCode(\"pet\", \"birthDate\", \"typeMismatch\")).andExpect(view().name(\"pets/createOrUpdatePetForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetControllerTests.java",
+  "methodName" : "testProcessUpdateFormWithBlankName",
+  "sourceCode" : "@Test\r\nvoid testProcessUpdateFormWithBlankName() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/{petId}/edit\", TEST_OWNER_ID, TEST_PET_ID).param(\"name\", \"  \").param(\"birthDate\", \"2015-02-12\")).andExpect(model().attributeHasNoErrors(\"owner\")).andExpect(model().attributeHasErrors(\"pet\")).andExpect(model().attributeHasFieldErrors(\"pet\", \"name\")).andExpect(model().attributeHasFieldErrorCode(\"pet\", \"name\", \"required\")).andExpect(view().name(\"pets/createOrUpdatePetForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetTypeFormatterTests.java",
+  "methodName" : "testPrint",
+  "sourceCode" : "@Test\r\nvoid testPrint() {\r\n    PetType petType = new PetType();\r\n    petType.setName(\"Hamster\");\r\n    String petTypeName = this.petTypeFormatter.print(petType, Locale.ENGLISH);\r\n    assertThat(petTypeName).isEqualTo(\"Hamster\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetTypeFormatterTests.java",
+  "methodName" : "shouldParse",
+  "sourceCode" : "@Test\r\nvoid shouldParse() throws ParseException {\r\n    given(types.findPetTypes()).willReturn(makePetTypes());\r\n    PetType petType = petTypeFormatter.parse(\"Bird\", Locale.ENGLISH);\r\n    assertThat(petType.getName()).isEqualTo(\"Bird\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetTypeFormatterTests.java",
+  "methodName" : "shouldThrowParseException",
+  "sourceCode" : "@Test\r\nvoid shouldThrowParseException() {\r\n    given(types.findPetTypes()).willReturn(makePetTypes());\r\n    Assertions.assertThrows(ParseException.class, () -> {\r\n        petTypeFormatter.parse(\"Fish\", Locale.ENGLISH);\r\n    });\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetValidatorTests.java",
+  "methodName" : "testValidate",
+  "sourceCode" : "@Test\r\nvoid testValidate() {\r\n    petType.setName(petTypeName);\r\n    pet.setName(petName);\r\n    pet.setType(petType);\r\n    pet.setBirthDate(petBirthDate);\r\n    petValidator.validate(pet, errors);\r\n    assertFalse(errors.hasErrors());\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetValidatorTests.java",
+  "methodName" : "testValidateWithInvalidPetName",
+  "sourceCode" : "@Test\r\nvoid testValidateWithInvalidPetName() {\r\n    petType.setName(petTypeName);\r\n    pet.setName(\"\");\r\n    pet.setType(petType);\r\n    pet.setBirthDate(petBirthDate);\r\n    petValidator.validate(pet, errors);\r\n    assertTrue(errors.hasFieldErrors(\"name\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetValidatorTests.java",
+  "methodName" : "testValidateWithInvalidPetType",
+  "sourceCode" : "@Test\r\nvoid testValidateWithInvalidPetType() {\r\n    pet.setName(petName);\r\n    pet.setType(null);\r\n    pet.setBirthDate(petBirthDate);\r\n    petValidator.validate(pet, errors);\r\n    assertTrue(errors.hasFieldErrors(\"type\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\PetValidatorTests.java",
+  "methodName" : "testValidateWithInvalidBirthDate",
+  "sourceCode" : "@Test\r\nvoid testValidateWithInvalidBirthDate() {\r\n    petType.setName(petTypeName);\r\n    pet.setName(petName);\r\n    pet.setType(petType);\r\n    pet.setBirthDate(null);\r\n    petValidator.validate(pet, errors);\r\n    assertTrue(errors.hasFieldErrors(\"birthDate\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\VisitControllerTests.java",
+  "methodName" : "testInitNewVisitForm",
+  "sourceCode" : "@Test\r\nvoid testInitNewVisitForm() throws Exception {\r\n    mockMvc.perform(get(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID)).andExpect(status().isOk()).andExpect(view().name(\"pets/createOrUpdateVisitForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\VisitControllerTests.java",
+  "methodName" : "testProcessNewVisitFormSuccess",
+  "sourceCode" : "@Test\r\nvoid testProcessNewVisitFormSuccess() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID).param(\"name\", \"George\").param(\"description\", \"Visit Description\")).andExpect(status().is3xxRedirection()).andExpect(view().name(\"redirect:/owners/{ownerId}\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\owner\\VisitControllerTests.java",
+  "methodName" : "testProcessNewVisitFormHasErrors",
+  "sourceCode" : "@Test\r\nvoid testProcessNewVisitFormHasErrors() throws Exception {\r\n    mockMvc.perform(post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID).param(\"name\", \"George\")).andExpect(model().attributeHasErrors(\"visit\")).andExpect(status().isOk()).andExpect(view().name(\"pets/createOrUpdateVisitForm\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\PetClinicIntegrationTests.java",
+  "methodName" : "testFindAll",
+  "sourceCode" : "@Test\r\nvoid testFindAll() {\r\n    vets.findAll();\r\n    // served from cache\r\n    vets.findAll();\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\PetClinicIntegrationTests.java",
+  "methodName" : "testOwnerDetails",
+  "sourceCode" : "@Test\r\nvoid testOwnerDetails() {\r\n    RestTemplate template = builder.rootUri(\"http://localhost:\" + port).build();\r\n    ResponseEntity<String> result = template.exchange(RequestEntity.get(\"/owners/1\").build(), String.class);\r\n    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldFindOwnersByLastName",
+  "sourceCode" : "@Test\r\nvoid shouldFindOwnersByLastName() {\r\n    Page<Owner> owners = this.owners.findByLastNameStartingWith(\"Davis\", pageable);\r\n    assertThat(owners).hasSize(2);\r\n    owners = this.owners.findByLastNameStartingWith(\"Daviss\", pageable);\r\n    assertThat(owners).isEmpty();\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldFindSingleOwnerWithPet",
+  "sourceCode" : "@Test\r\nvoid shouldFindSingleOwnerWithPet() {\r\n    Optional<Owner> optionalOwner = this.owners.findById(1);\r\n    assertThat(optionalOwner).isPresent();\r\n    Owner owner = optionalOwner.get();\r\n    assertThat(owner.getLastName()).startsWith(\"Franklin\");\r\n    assertThat(owner.getPets()).hasSize(1);\r\n    assertThat(owner.getPets().get(0).getType()).isNotNull();\r\n    assertThat(owner.getPets().get(0).getType().getName()).isEqualTo(\"cat\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldInsertOwner",
+  "sourceCode" : "@Test\r\n@Transactional\r\nvoid shouldInsertOwner() {\r\n    Page<Owner> owners = this.owners.findByLastNameStartingWith(\"Schultz\", pageable);\r\n    int found = (int) owners.getTotalElements();\r\n    Owner owner = new Owner();\r\n    owner.setFirstName(\"Sam\");\r\n    owner.setLastName(\"Schultz\");\r\n    owner.setAddress(\"4, Evans Street\");\r\n    owner.setCity(\"Wollongong\");\r\n    owner.setTelephone(\"4444444444\");\r\n    this.owners.save(owner);\r\n    assertThat(owner.getId()).isNotZero();\r\n    owners = this.owners.findByLastNameStartingWith(\"Schultz\", pageable);\r\n    assertThat(owners.getTotalElements()).isEqualTo(found + 1);\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldUpdateOwner",
+  "sourceCode" : "@Test\r\n@Transactional\r\nvoid shouldUpdateOwner() {\r\n    Optional<Owner> optionalOwner = this.owners.findById(1);\r\n    assertThat(optionalOwner).isPresent();\r\n    Owner owner = optionalOwner.get();\r\n    String oldLastName = owner.getLastName();\r\n    String newLastName = oldLastName + \"X\";\r\n    owner.setLastName(newLastName);\r\n    this.owners.save(owner);\r\n    // retrieving new name from database\r\n    optionalOwner = this.owners.findById(1);\r\n    assertThat(optionalOwner).isPresent();\r\n    owner = optionalOwner.get();\r\n    assertThat(owner.getLastName()).isEqualTo(newLastName);\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldFindAllPetTypes",
+  "sourceCode" : "@Test\r\nvoid shouldFindAllPetTypes() {\r\n    Collection<PetType> petTypes = this.types.findPetTypes();\r\n    PetType petType1 = EntityUtils.getById(petTypes, PetType.class, 1);\r\n    assertThat(petType1.getName()).isEqualTo(\"cat\");\r\n    PetType petType4 = EntityUtils.getById(petTypes, PetType.class, 4);\r\n    assertThat(petType4.getName()).isEqualTo(\"snake\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldInsertPetIntoDatabaseAndGenerateId",
+  "sourceCode" : "@Test\r\n@Transactional\r\nvoid shouldInsertPetIntoDatabaseAndGenerateId() {\r\n    Optional<Owner> optionalOwner = this.owners.findById(6);\r\n    assertThat(optionalOwner).isPresent();\r\n    Owner owner6 = optionalOwner.get();\r\n    int found = owner6.getPets().size();\r\n    Pet pet = new Pet();\r\n    pet.setName(\"bowser\");\r\n    Collection<PetType> types = this.types.findPetTypes();\r\n    pet.setType(EntityUtils.getById(types, PetType.class, 2));\r\n    pet.setBirthDate(LocalDate.now());\r\n    owner6.addPet(pet);\r\n    assertThat(owner6.getPets()).hasSize(found + 1);\r\n    this.owners.save(owner6);\r\n    optionalOwner = this.owners.findById(6);\r\n    assertThat(optionalOwner).isPresent();\r\n    owner6 = optionalOwner.get();\r\n    assertThat(owner6.getPets()).hasSize(found + 1);\r\n    // checks that id has been generated\r\n    pet = owner6.getPet(\"bowser\");\r\n    assertThat(pet.getId()).isNotNull();\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldUpdatePetName",
+  "sourceCode" : "@Test\r\n@Transactional\r\nvoid shouldUpdatePetName() {\r\n    Optional<Owner> optionalOwner = this.owners.findById(6);\r\n    assertThat(optionalOwner).isPresent();\r\n    Owner owner6 = optionalOwner.get();\r\n    Pet pet7 = owner6.getPet(7);\r\n    String oldName = pet7.getName();\r\n    String newName = oldName + \"X\";\r\n    pet7.setName(newName);\r\n    this.owners.save(owner6);\r\n    optionalOwner = this.owners.findById(6);\r\n    assertThat(optionalOwner).isPresent();\r\n    owner6 = optionalOwner.get();\r\n    pet7 = owner6.getPet(7);\r\n    assertThat(pet7.getName()).isEqualTo(newName);\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldFindVets",
+  "sourceCode" : "@Test\r\nvoid shouldFindVets() {\r\n    Collection<Vet> vets = this.vets.findAll();\r\n    Vet vet = EntityUtils.getById(vets, Vet.class, 3);\r\n    assertThat(vet.getLastName()).isEqualTo(\"Douglas\");\r\n    assertThat(vet.getNrOfSpecialties()).isEqualTo(2);\r\n    assertThat(vet.getSpecialties().get(0).getName()).isEqualTo(\"dentistry\");\r\n    assertThat(vet.getSpecialties().get(1).getName()).isEqualTo(\"surgery\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldAddNewVisitForPet",
+  "sourceCode" : "@Test\r\n@Transactional\r\nvoid shouldAddNewVisitForPet() {\r\n    Optional<Owner> optionalOwner = this.owners.findById(6);\r\n    assertThat(optionalOwner).isPresent();\r\n    Owner owner6 = optionalOwner.get();\r\n    Pet pet7 = owner6.getPet(7);\r\n    int found = pet7.getVisits().size();\r\n    Visit visit = new Visit();\r\n    visit.setDescription(\"test\");\r\n    owner6.addVisit(pet7.getId(), visit);\r\n    this.owners.save(owner6);\r\n    //\r\n    assertThat(pet7.getVisits()).hasSize(//\r\n    found + 1).allMatch(value -> value.getId() != null);\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\service\\ClinicServiceTests.java",
+  "methodName" : "shouldFindVisitsByPetId",
+  "sourceCode" : "@Test\r\nvoid shouldFindVisitsByPetId() {\r\n    Optional<Owner> optionalOwner = this.owners.findById(6);\r\n    assertThat(optionalOwner).isPresent();\r\n    Owner owner6 = optionalOwner.get();\r\n    Pet pet7 = owner6.getPet(7);\r\n    Collection<Visit> visits = pet7.getVisits();\r\n    //\r\n    assertThat(visits).hasSize(//\r\n    2).element(0).extracting(Visit::getDate).isNotNull();\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\system\\CrashControllerIntegrationTests.java",
+  "methodName" : "testTriggerExceptionJson",
+  "sourceCode" : "@Test\r\nvoid testTriggerExceptionJson() {\r\n    ResponseEntity<Map<String, Object>> resp = rest.exchange(RequestEntity.get(\"http://localhost:\" + port + \"/oups\").build(), new ParameterizedTypeReference<Map<String, Object>>() {\r\n    });\r\n    assertThat(resp).isNotNull();\r\n    assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);\r\n    assertThat(resp.getBody()).containsKey(\"timestamp\");\r\n    assertThat(resp.getBody()).containsKey(\"status\");\r\n    assertThat(resp.getBody()).containsKey(\"error\");\r\n    assertThat(resp.getBody()).containsEntry(\"message\", \"Expected: controller used to showcase what happens when an exception is thrown\");\r\n    assertThat(resp.getBody()).containsEntry(\"path\", \"/oups\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\system\\CrashControllerIntegrationTests.java",
+  "methodName" : "testTriggerExceptionHtml",
+  "sourceCode" : "@Test\r\nvoid testTriggerExceptionHtml() {\r\n    HttpHeaders headers = new HttpHeaders();\r\n    headers.setAccept(List.of(MediaType.TEXT_HTML));\r\n    ResponseEntity<String> resp = rest.exchange(\"http://localhost:\" + port + \"/oups\", HttpMethod.GET, new HttpEntity<>(headers), String.class);\r\n    assertThat(resp).isNotNull();\r\n    assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);\r\n    assertThat(resp.getBody()).isNotNull();\r\n    // html:\r\n    assertThat(resp.getBody()).containsSubsequence(\"<body>\", \"<h2>\", \"Something happened...\", \"</h2>\", \"<p>\", \"Expected:\", \"controller\", \"used\", \"to\", \"showcase\", \"what\", \"happens\", \"when\", \"an\", \"exception\", \"is\", \"thrown\", \"</p>\", \"</body>\");\r\n    // Not the whitelabel error page:\r\n    assertThat(resp.getBody()).doesNotContain(\"Whitelabel Error Page\", \"This application has no explicit mapping for\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\system\\CrashControllerTests.java",
+  "methodName" : "testTriggerException",
+  "sourceCode" : "@Test\r\nvoid testTriggerException() {\r\n    assertThatExceptionOfType(RuntimeException.class).isThrownBy(() -> testee.triggerException()).withMessageContaining(\"Expected: controller used to showcase what happens when an exception is thrown\");\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\system\\I18nPropertiesSyncTest.java",
+  "methodName" : "checkNonInternationalizedStrings",
+  "sourceCode" : "@Test\r\npublic void checkNonInternationalizedStrings() throws IOException {\r\n    Path root = Paths.get(\"src/main\");\r\n    List<Path> files;\r\n    try (Stream<Path> stream = Files.walk(root)) {\r\n        files = stream.filter(p -> p.toString().endsWith(\".java\") || p.toString().endsWith(\".html\")).filter(p -> !p.toString().contains(\"/test/\")).filter(p -> !p.getFileName().toString().endsWith(\"Test.java\")).toList();\r\n    }\r\n    StringBuilder report = new StringBuilder();\r\n    for (Path file : files) {\r\n        List<String> lines = Files.readAllLines(file);\r\n        for (int i = 0; i < lines.size(); i++) {\r\n            String line = lines.get(i).trim();\r\n            if (line.startsWith(\"//\") || line.startsWith(\"@\") || line.contains(\"log.\") || line.contains(\"System.out\"))\r\n                continue;\r\n            if (file.toString().endsWith(\".html\")) {\r\n                boolean hasLiteralText = HTML_TEXT_LITERAL.matcher(line).find();\r\n                boolean hasThTextAttribute = HAS_TH_TEXT_ATTRIBUTE.matcher(line).find();\r\n                boolean isBracketOnly = BRACKET_ONLY.matcher(line).find();\r\n                if (hasLiteralText && !line.contains(\"#{\") && !hasThTextAttribute && !isBracketOnly) {\r\n                    report.append(\"HTML: \").append(file).append(\" Line \").append(i + 1).append(\": \").append(line).append(\"\\n\");\r\n                }\r\n            }\r\n        }\r\n    }\r\n    if (!report.isEmpty()) {\r\n        fail(\"Hardcoded (non-internationalized) strings found:\\n\" + report);\r\n    }\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\system\\I18nPropertiesSyncTest.java",
+  "methodName" : "checkI18nPropertyFilesAreInSync",
+  "sourceCode" : "@Test\r\npublic void checkI18nPropertyFilesAreInSync() throws IOException {\r\n    List<Path> propertyFiles;\r\n    try (Stream<Path> stream = Files.walk(Paths.get(I18N_DIR))) {\r\n        propertyFiles = stream.filter(p -> p.getFileName().toString().startsWith(BASE_NAME)).filter(p -> p.getFileName().toString().endsWith(PROPERTIES)).toList();\r\n    }\r\n    Map<String, Properties> localeToProps = new HashMap<>();\r\n    for (Path path : propertyFiles) {\r\n        Properties props = new Properties();\r\n        try (var reader = Files.newBufferedReader(path)) {\r\n            props.load(reader);\r\n            localeToProps.put(path.getFileName().toString(), props);\r\n        }\r\n    }\r\n    String baseFile = BASE_NAME + PROPERTIES;\r\n    Properties baseProps = localeToProps.get(baseFile);\r\n    if (baseProps == null) {\r\n        fail(\"Base properties file '\" + baseFile + \"' not found.\");\r\n        return;\r\n    }\r\n    Set<String> baseKeys = baseProps.stringPropertyNames();\r\n    StringBuilder report = new StringBuilder();\r\n    for (Map.Entry<String, Properties> entry : localeToProps.entrySet()) {\r\n        String fileName = entry.getKey();\r\n        // We use fallback logic to include english strings, hence messages_en is not\r\n        // populated.\r\n        if (fileName.equals(baseFile) || fileName.equals(\"messages_en.properties\"))\r\n            continue;\r\n        Properties props = entry.getValue();\r\n        Set<String> missingKeys = new TreeSet<>(baseKeys);\r\n        missingKeys.removeAll(props.stringPropertyNames());\r\n        if (!missingKeys.isEmpty()) {\r\n            report.append(\"Missing keys in \").append(fileName).append(\":\\n\");\r\n            missingKeys.forEach(k -> report.append(\"  \").append(k).append(\"\\n\"));\r\n        }\r\n    }\r\n    if (!report.isEmpty()) {\r\n        fail(\"Translation files are not in sync:\\n\" + report);\r\n    }\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\vet\\VetControllerTests.java",
+  "methodName" : "testShowVetListHtml",
+  "sourceCode" : "@Test\r\nvoid testShowVetListHtml() throws Exception {\r\n    mockMvc.perform(MockMvcRequestBuilders.get(\"/vets.html?page=1\")).andExpect(status().isOk()).andExpect(model().attributeExists(\"listVets\")).andExpect(view().name(\"vets/vetList\"));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\vet\\VetControllerTests.java",
+  "methodName" : "testShowResourcesVetList",
+  "sourceCode" : "@Test\r\nvoid testShowResourcesVetList() throws Exception {\r\n    ResultActions actions = mockMvc.perform(get(\"/vets\").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());\r\n    actions.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath(\"$.vetList[0].id\").value(1));\r\n}",
+  "annotations" : [ "Test" ]
+}, {
+  "filePath" : "d:\\chenhao\\test project\\spring-petclinic\\src\\test\\java\\org\\springframework\\samples\\petclinic\\vet\\VetTests.java",
+  "methodName" : "testSerialization",
+  "sourceCode" : "@Test\r\nvoid testSerialization() {\r\n    Vet vet = new Vet();\r\n    vet.setFirstName(\"Zaphod\");\r\n    vet.setLastName(\"Beeblebrox\");\r\n    vet.setId(123);\r\n    @SuppressWarnings(\"deprecation\")\r\n    Vet other = (Vet) SerializationUtils.deserialize(SerializationUtils.serialize(vet));\r\n    assertThat(other.getFirstName()).isEqualTo(vet.getFirstName());\r\n    assertThat(other.getLastName()).isEqualTo(vet.getLastName());\r\n    assertThat(other.getId()).isEqualTo(vet.getId());\r\n}",
+  "annotations" : [ "Test" ]
+} ]

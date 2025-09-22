@@ -1,0 +1,4 @@
+com\testparser\util\TestCaseJsonExporter.class
+com\testparser\TestParserApp.class
+com\testparser\TestCaseFinder.class
+com\testparser\model\TestCaseInfo.class
